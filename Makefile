@@ -1,5 +1,5 @@
 link:
-	stow --verbose --target=$$HOME --restow -t ~ */
+	./scripts/link.sh
 
 unlink:
-	stow --verbose --target=$$HOME --delete -t ~ */
+	./scripts/unlink.sh
