@@ -1,0 +1,54 @@
+#!/bin/bash
+# This file contains configurations that specifically run in OSx
+
+# ---------- #
+# Essentials #
+# ---------- #
+
+# Shutup OSX deprecation warnings on bash
+# https://stackoverflow.com/q/30479607
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
+# ---- #
+# Brew #
+# ---- #
+
+# First Load brew
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+export BREW_PREFIX=$(brew --prefix)
+
+# This line allows utilities in core-utils to override the mac default ones
+PATH="$BREW_PREFIX/opt/coreutils/libexec/gnubin:$PATH"
+
+# Autocompletion for git because OSX is smart
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion || {
+    # if not found in /usr/local/etc, try the brew --prefix location
+    [ -f "$BREW_PREFIX/etc/bash_completion.d/git-completion.bash" ] && \
+        . $BREW_PREFIX/etc/bash_completion.d/git-completion.bash
+}
+
+# ASDF compatibility
+. $(brew --prefix asdf)/libexec/asdf.sh
+. $(brew --prefix asdf)/etc/bash_completion.d/asdf.bash
+
+# Direnv
+eval "$($BREW_PREFIX/bin/direnv hook bash)"
+
+# ------ #
+# Colors #
+# ------ #
+
+# Prefer color because OSX is a bit monochrome
+# Reminder you can ignore aliased by prefixing backslash
+# ie: \ls
+alias grep='grep -n --color=auto'
+alias ls='ls --color'
+alias less='less -R'
+
+# ls colors variable for OSX terminal
+# https://gist.github.com/monolithed/efe54b62141159316c7a
+export LSCOLORS=ExFxCxDxBxegedabagacad
+
+# Enable syntax-highlighting in less.
+export LESSOPEN="| $(brew --prefix)/bin/src-hilite-lesspipe.sh %s"
