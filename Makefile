@@ -1,3 +1,6 @@
+install:
+	./scripts/install.sh
+
 link:
 	./scripts/link.sh
 
